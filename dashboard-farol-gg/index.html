@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Farol de G&G - CNA</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <h1 class="header-title">Farol de G&G</h1>
+                <p class="header-subtitle">Sistema de Indicadores CNA 2026</p>
+            </div>
+            <div class="header-right">
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">29</span>
+                        <span class="stat-label">Indicadores</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">8</span>
+                        <span class="stat-label">Pessoas</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-content">
+            <button class="nav-btn active" data-view="dashboard-mensal">Dashboard Mensal</button>
+            <button class="nav-btn" data-view="dashboard-anual">Dashboard Anual</button>
+            <button class="nav-btn" data-view="indicadores">Indicadores</button>
+            <button class="nav-btn" data-view="admin">Administração</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Dashboard Mensal -->
+        <div id="dashboard-mensal" class="view active">
+            <div class="view-header">
+                <h2 class="view-title">Dashboard Mensal 2026</h2>
+                <div class="filters">
+                    <select id="filter-responsible" class="filter-select">
+                        <option value="Todos">Todos os Responsáveis</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color green"></div>
+                    <span>Meta Atingida</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color yellow"></div>
+                    <span>Atenção</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color red"></div>
+                    <span>Crítico</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color gray"></div>
+                    <span>Sem Medição</span>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="monthly-table" class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th class="col-indicator">Indicador</th>
+                            <th class="col-responsible">Responsável</th>
+                            <th>Jan</th><th>Fev</th><th>Mar</th><th>Abr</th>
+                            <th>Mai</th><th>Jun</th><th>Jul</th><th>Ago</th>
+                            <th>Set</th><th>Out</th><th>Nov</th><th>Dez</th>
+                        </tr>
+                    </thead>
+                    <tbody id="monthly-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Dashboard Anual -->
+        <div id="dashboard-anual" class="view">
+            <div class="view-header">
+                <h2 class="view-title">Dashboard Anual 2026</h2>
+            </div>
+            <div class="annual-grid">
+                <div class="annual-chart-card">
+                    <h3 class="card-title">Distribuição de Status</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+                <div class="annual-summary-card">
+                    <h3 class="card-title">Performance por Responsável</h3>
+                    <div id="performance-table" class="performance-table"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Indicadores -->
+        <div id="indicadores" class="view">
+            <div class="view-header">
+                <h2 class="view-title">Todos os Indicadores</h2>
+                <div class="filters">
+                    <input type="text" id="search-indicator" class="search-input" placeholder="Buscar...">
+                    <select id="filter-category" class="filter-select">
+                        <option value="Todos">Todas as Categorias</option>
+                    </select>
+                </div>
+            </div>
+            <div id="indicators-list" class="indicators-list"></div>
+        </div>
+
+        <!-- Administração -->
+        <div id="admin" class="view">
+            <div class="view-header">
+                <h2 class="view-title">Administração de Dados</h2>
+                <div class="admin-actions">
+                    <button id="btn-export" class="btn btn-secondary">Exportar Dados</button>
+                    <button id="btn-import" class="btn btn-secondary">Importar Dados</button>
+                    <button id="btn-clear" class="btn btn-danger">Limpar Dados</button>
+                </div>
+            </div>
+            <div class="admin-grid">
+                <div class="admin-form-card">
+                    <h3 class="card-title">Atualizar Indicador</h3>
+                    <form id="update-form" class="admin-form">
+                        <div class="form-group">
+                            <label>Indicador</label>
+                            <select id="select-indicator" class="form-control" required>
+                                <option value="">Selecione...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Mês</label>
+                            <select id="select-month" class="form-control" required>
+                                <option value="">Selecione...</option>
+                                <option value="Jan">Janeiro</option><option value="Fev">Fevereiro</option>
+                                <option value="Mar">Março</option><option value="Abr">Abril</option>
+                                <option value="Mai">Maio</option><option value="Jun">Junho</option>
+                                <option value="Jul">Julho</option><option value="Ago">Agosto</option>
+                                <option value="Set">Setembro</option><option value="Out">Outubro</option>
+                                <option value="Nov">Novembro</option><option value="Dez">Dezembro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor</label>
+                            <input type="text" id="input-value" class="form-control" placeholder="Ex: 85" required>
+                        </div>
+                        <div id="indicator-info" class="indicator-info-box" style="display:none;"></div>
+                        <div id="status-preview" class="status-preview" style="display:none;"></div>
+                        <button type="submit" class="btn btn-primary btn-block">Salvar</button>
+                    </form>
+                </div>
+                <div class="admin-history-card">
+                    <h3 class="card-title">Histórico</h3>
+                    <div id="update-history" class="update-history">
+                        <p class="empty-state">Nenhuma atualização ainda.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <input type="file" id="import-file-input" accept=".json" style="display:none;">
+    <script src="data/indicators.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
